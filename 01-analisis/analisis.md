@@ -121,7 +121,34 @@ Se conservan del modelo actual: `CONVERSACION(id, fecha_inicio, fecha_fin, calif
 
 ---
 
-## 4. Diagrama entidad-relación
+## 4. Diagrama de flujo — Proceso de compra
+
+```mermaid
+flowchart TD
+    A[Cliente navega el catálogo] --> B{¿Está autenticado?}
+    B -- No --> C[Redirigir a login]
+    C --> B
+    B -- Sí --> D[Agregar producto al carrito]
+    D --> E{¿Hay stock suficiente?}
+    E -- No --> F[Mostrar mensaje: sin disponibilidad]
+    E -- Sí --> G[Actualizar carrito]
+    G --> H[Cliente confirma compra]
+    H --> I[Generar pedido]
+    I --> J[Actualizar inventario]
+    J --> K[Mostrar confirmación al cliente]
+```
+
+## 5. Diagrama de contexto del sistema
+
+```mermaid
+graph LR
+    Cliente[Cliente] -->|Solicita catálogo, compra| Sistema[Sistema FarmaVida]
+    Admin[Administrador] -->|Gestiona productos, revisa reportes| Sistema
+    Sistema -->|Consultas / actualizaciones| BD[(Base de datos MySQL)]
+    Sistema -->|Respuestas automáticas| Chatbot[Módulo Chatbot]
+```
+
+## 6. Diagrama entidad-relación
 
 ```mermaid
 erDiagram
@@ -192,7 +219,7 @@ erDiagram
 
 ---
 
-## 5. Reglas de negocio identificadas
+## 7. Reglas de negocio identificadas
 
 | ID | Regla |
 |---|---|
@@ -204,7 +231,7 @@ erDiagram
 
 ---
 
-## 6. Matriz de trazabilidad (requerimiento → entidad/proceso)
+## 8. Matriz de trazabilidad (requerimiento → entidad/proceso)
 
 | Requerimiento (fase 00) | Entidad / Proceso relacionado |
 |---|---|
@@ -217,6 +244,6 @@ erDiagram
 
 ---
 
-## 7. Conclusión de la fase de análisis
+## 9. Conclusión de la fase de análisis
 
 El modelo propuesto normaliza la categoría de productos y separa el detalle de cada pedido, permitiendo que un pedido incluya múltiples productos (lo cual el modelo actual de `database.sql` no soporta). Este modelo será la base del diagrama de diseño de base de datos y de la arquitectura que se documentarán en la fase **02-diseño**.
